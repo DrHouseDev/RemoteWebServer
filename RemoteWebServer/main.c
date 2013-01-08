@@ -207,11 +207,12 @@ static void *mongoose_callback(enum mg_event ev, struct mg_connection *conn) {
   if (ev == MG_NEW_REQUEST) {
 
 	  if (!strncmp(mg_get_request_info(conn)->uri, "/play", 5)) {
-
+		  
+		  const char* path = mg_get_option(ctx, "document_root");
 		  char content[1024];
 		  int content_length = _snprintf(content, sizeof(content),
-			  "Play command detected",
-			   mg_get_request_info(conn)->remote_port);
+			  "Play command detected, current path: %s , current root: %s",
+			   mg_get_request_info(conn)->uri, path);
 		  mg_printf(conn,
 			  "HTTP/1.1 200 OK\r\n"
 			  "Content-Type: text/plain\r\n"
@@ -219,6 +220,7 @@ static void *mongoose_callback(enum mg_event ev, struct mg_connection *conn) {
               "\r\n"
               "%s",
               content_length, content);
+
 	  }
     // Mark as processed
     //return "";
