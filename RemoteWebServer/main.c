@@ -208,11 +208,20 @@ static void *mongoose_callback(enum mg_event ev, struct mg_connection *conn) {
 
 	  if (!strncmp(mg_get_request_info(conn)->uri, "/play", 5)) {
 		  
-		  const char* path = mg_get_option(ctx, "document_root");
+		  char root[260];
+		  char path[260];
+		  char final[1024] = {0};
 		  char content[1024];
-		  int content_length = _snprintf(content, sizeof(content),
-			  "Play command detected, current path: %s , current root: %s",
-			   mg_get_request_info(conn)->uri, path);
+		  int content_length;
+		  sscanf(mg_get_request_info(conn)->uri, "/play%[^\t\n]", &path);
+		  sscanf(mg_get_option(ctx, "document_root"), ".%s", &root);
+		  sscanf(mg_get_option(ctx, "document_root"), ".%s", &root);
+		  strncat(final, "/play", 5);
+		  strncat(final, root, sizeof(root));
+		  strncat(final, path, sizeof(path));
+		  content_length = _snprintf(content, sizeof(content),
+			  "Play command detected, current path: %s , current root: %s. Final concatenation: %s",
+			   path, root, final);
 		  mg_printf(conn,
 			  "HTTP/1.1 200 OK\r\n"
 			  "Content-Type: text/plain\r\n"
