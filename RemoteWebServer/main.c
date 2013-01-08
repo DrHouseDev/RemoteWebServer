@@ -12,7 +12,7 @@ static void *callback(enum mg_event event,
 
 		  char content[1024];
 		  int content_length = _snprintf(content, sizeof(content),
-			  "PlayBoy",
+			  "Play command detected",
 			  request_info->remote_port);
 		  mg_printf(conn,
 			  "HTTP/1.1 200 OK\r\n"
