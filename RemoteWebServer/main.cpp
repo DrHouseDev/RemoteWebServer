@@ -14,6 +14,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <string>
 
 #include "mongoose.h"
 
@@ -484,7 +485,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR cmdline, int show) {
   TrayIcon.cbSize = sizeof(TrayIcon);
   TrayIcon.uID = ID_TRAYICON;
   TrayIcon.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-  TrayIcon.hIcon = LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_ICON),
+  TrayIcon.hIcon = (HICON)::LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(ID_ICON),
                              IMAGE_ICON, 16, 16, 0);
   TrayIcon.hWnd = hWnd;
   snprintf(TrayIcon.szTip, sizeof(TrayIcon.szTip), "%s", server_name);
