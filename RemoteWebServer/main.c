@@ -216,7 +216,6 @@ static void *mongoose_callback(enum mg_event ev, struct mg_connection *conn) {
 		  sscanf(mg_get_request_info(conn)->uri, "/play%[^\t\n]", path);
 		  sscanf(mg_get_option(ctx, "document_root"), ".%s", root);
 		  //sscanf(mg_get_option(ctx, "document_root"), ".%s", &root);
-		  strncat(final, "/play", 5);
 		  strncat(final, root, sizeof(root));
 		  strncat(final, path, sizeof(path));
 		  content_length = _snprintf(content, sizeof(content),
@@ -326,10 +325,10 @@ static void edit_config_file(void) {
     fclose(fp);
   } else if ((fp = fopen(config_file, "a+")) != NULL) {
     fprintf(fp,
-            "# Mongoose web server configuration file.\n"
+            "# Dr. House's Remote Web Server configuration file.\n"
             "# Lines starting with '#' and empty lines are ignored.\n"
             "# For detailed description of every option, visit\n"
-            "# http://code.google.com/p/mongoose/wiki/MongooseManual\n\n");
+            "# https://github.com/valenok/mongoose/wiki/Manual\n\n");
     names = mg_get_valid_option_names();
     for (i = 0; names[i] != NULL; i += 3) {
       value = mg_get_option(ctx, names[i]);
@@ -352,7 +351,7 @@ static void show_error(void) {
 }
 
 static int manage_service(int action) {
-  static const char *service_name = "Mongoose";
+  static const char *service_name = "RemoteWebServer";
   SC_HANDLE hSCM = NULL, hService = NULL;
   SERVICE_DESCRIPTION descr = {server_name};
   char path[PATH_MAX + 20];  // Path to executable plus magic argument
@@ -435,7 +434,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam,
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
           hMenu = CreatePopupMenu();
-          AppendMenu(hMenu, MF_STRING | MF_GRAYED, ID_SEPARATOR, server_name);
+          AppendMenu(hMenu, MF_STRING, ID_SEPARATOR, server_name);
           AppendMenu(hMenu, MF_SEPARATOR, ID_SEPARATOR, "");
           service_installed = manage_service(0);
           snprintf(buf, sizeof(buf), "NT service: %s installed",
